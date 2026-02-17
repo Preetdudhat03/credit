@@ -35,6 +35,7 @@ import {
 import { maskIdentifier } from '@/lib/rbac';
 import { CreditScoreGauge } from '@/components/CreditScoreGauge';
 import { RiskBadge } from '@/components/RiskBadge';
+import { ExplanationPanel } from '@/components/ExplanationPanel';
 
 const assignedApps = [
     { id: 'APP-102', name: 'James Doe', phone: '9876543210', score: 780, risk: 'Low', status: 'Pending', date: '2h ago' },
@@ -182,6 +183,26 @@ export function LoanOfficerDashboard() {
                 </CardContent>
             </Card>
 
+            <Card>
+                <CardHeader>
+                    <CardTitle>SHAP Explanation Summary (Featured Application)</CardTitle>
+                    <CardDescription>AI reasoning for the highest priority application (APP-102).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ExplanationPanel
+                        positiveFactors={[
+                            "High monthly income stability over 12 months",
+                            "Low debt-to-income ratio (24%)",
+                            "Consistent bank balance maintenance"
+                        ]}
+                        negativeFactors={[
+                            "Recent minor late payment (8 months ago)",
+                            "Slightly high transaction frequency in last 30 days"
+                        ]}
+                    />
+                </CardContent>
+            </Card>
+
             <div className="grid gap-4 md:grid-cols-2">
                 <Card>
                     <CardHeader>
@@ -214,7 +235,7 @@ export function LoanOfficerDashboard() {
                     <CardContent className="space-y-4 text-sm">
                         <div className="flex justify-between items-center pb-2 border-b">
                             <span className="text-slate-500">Income Consistency</span>
-                            <Badge className="bg-green-100 text-green-700 hover:bg-green-100">High (0.92)</Badge>
+                            <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none">High (0.92)</Badge>
                         </div>
                         <div className="flex justify-between items-center pb-2 border-b">
                             <span className="text-slate-500">Debt-to-Income (DTI)</span>

@@ -6,59 +6,37 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Bell, Lock, Eye, Monitor, CreditCard, ShieldCheck } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAuthStore } from '@/lib/auth-store';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
 
 export default function SettingsPage() {
+    const { user } = useAuthStore();
+
+    if (!user) return null;
+
     return (
-        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
             <div className="flex items-center gap-2 pb-4 border-b">
                 <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
             </div>
 
             <div className="grid gap-6">
-                {/* Security Section */}
-                <Card className="shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <div className="space-y-1">
-                            <CardTitle className="flex items-center gap-2">
-                                <Lock className="h-4 w-4 text-slate-500" />
-                                Security & Authentication
-                            </CardTitle>
-                            <CardDescription>Manage your password and Multi-Factor settings.</CardDescription>
-                        </div>
-                        <Button variant="outline" size="sm">Update</Button>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border dark:bg-slate-900">
-                            <div className="flex items-center gap-3">
-                                <ShieldCheck className="h-5 w-5 text-green-600" />
-                                <div>
-                                    <p className="text-sm font-medium">Two-Factor Authentication</p>
-                                    <p className="text-xs text-slate-500">Protect your account with an extra layer of security.</p>
-                                </div>
-                            </div>
-                            <Badge variant="outline" className="bg-green-50 text-green-700">Enabled</Badge>
-                        </div>
-                        <div className="flex items-center justify-between pt-2">
-                            <span className="text-sm">Last password change</span>
-                            <span className="text-sm text-slate-500">45 days ago</span>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Preferences Section */}
+                {/* Profile Section - Common for all */}
                 <Card className="shadow-sm">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Monitor className="h-4 w-4 text-slate-500" />
-                            Preferences
+                            General Preferences
                         </CardTitle>
-                        <CardDescription>Customize your dashboard experience.</CardDescription>
+                        <CardDescription>Update your basic account preferences and theme.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div className="space-y-0.5">
-                                <Label>Theme Interface</Label>
-                                <p className="text-xs text-slate-500">Select how you want TrustScoreAI to look.</p>
+                                <Label>Display Theme</Label>
+                                <p className="text-xs text-slate-500">Choose between light, dark or system.</p>
                             </div>
                             <Select defaultValue="system">
                                 <SelectTrigger className="w-[180px]">
@@ -71,61 +49,97 @@ export default function SettingsPage() {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <Separator />
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="space-y-0.5">
-                                <Label>Default Language</Label>
-                                <p className="text-xs text-slate-500">The language used throughout the application.</p>
-                            </div>
-                            <Select defaultValue="en">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select language" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="en">English (US)</SelectItem>
-                                    <SelectItem value="fr">French</SelectItem>
-                                    <SelectItem value="es">Spanish</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
                     </CardContent>
                 </Card>
 
-                {/* Notifications Section */}
+                {/* Risk Manager Specific Settings */}
+                {user.role === 'risk_manager' && (
+                    <>
+                        <Card className="border-l-4 border-l-red-500">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-red-700">
+                                    <ShieldCheck className="h-5 w-5" /> Risk Threshold Control
+                                </CardTitle>
+                                <CardDescription>Adjust the AI decision boundary for automatic approvals/rejections.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-8">
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <Label>Approval Threshold (Credit Score)</Label>
+                                        <span className="font-bold text-green-600">750+</span>
+                                    </div>
+                                    <Slider defaultValue={[750]} max={900} min={300} step={10} />
+                                    <p className="text-[10px] text-slate-500 italic">Applications above this score will be auto-flagged for approval.</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <Label>Rejection Threshold (Fraud Score)</Label>
+                                        <span className="font-bold text-red-600">85%+</span>
+                                    </div>
+                                    <Slider defaultValue={[85]} max={100} min={0} step={5} />
+                                    <p className="text-[10px] text-slate-500 italic">Applications above this fraud probability will be auto-rejected.</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </>
+                )}
+
+                {/* Admin Specific Settings (Quick Access) */}
+                {user.role === 'admin' && (
+                    <Card className="border-l-4 border-l-primary">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Lock className="h-5 w-5" /> System Security Policy
+                            </CardTitle>
+                            <CardDescription>Global authentication and session management.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label>Mandatory MFA</Label>
+                                    <p className="text-xs text-slate-500">All bank staff must Use 2FA.</p>
+                                </div>
+                                <Switch checked={true} />
+                            </div>
+                            <Separator />
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label>Concurrent Session Limit</Label>
+                                    <p className="text-xs text-slate-500">Maximum active sessions per user.</p>
+                                </div>
+                                <Badge variant="outline">2 Sessions</Badge>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
+
+                {/* Notifications - All roles */}
                 <Card className="shadow-sm">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Bell className="h-4 w-4 text-slate-500" />
-                            Notifications
+                            Notifications & Alerts
                         </CardTitle>
-                        <CardDescription>Control which alerts you receive.</CardDescription>
+                        <CardDescription>Manage how you receive updates.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm">Score calculation alerts</span>
-                            <Button variant="ghost" className="text-primary text-xs font-semibold">Enabled</Button>
+                            <span className="text-sm">Email digest (Daily)</span>
+                            <Switch checked={true} />
                         </div>
                         <Separator />
                         <div className="flex items-center justify-between">
-                            <span className="text-sm">Marketing emails</span>
-                            <Button variant="ghost" className="text-slate-400 text-xs font-semibold">Disabled</Button>
+                            <span className="text-sm">In-app critical alerts</span>
+                            <Switch checked={true} />
                         </div>
                     </CardContent>
                 </Card>
 
                 <div className="pt-6 flex justify-end gap-3">
-                    <Button variant="ghost" className="text-red-500 hover:text-red-600 hover:bg-red-50">Deactivate Account</Button>
-                    <Button>Save All Changes</Button>
+                    <Button variant="ghost">Discard</Button>
+                    <Button className="bg-primary hover:bg-primary/90">Apply Changes</Button>
                 </div>
             </div>
         </div>
-    );
-}
-
-function Badge({ children, variant, className }: { children: React.ReactNode, variant?: string, className?: string }) {
-    return (
-        <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${className}`}>
-            {children}
-        </span>
     );
 }
