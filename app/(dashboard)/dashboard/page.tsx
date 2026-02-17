@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuthStore } from '@/lib/auth-store';
 import { LoanOfficerDashboard } from '@/components/roles/LoanOfficerDashboard';
 import { RiskManagerDashboard } from '@/components/roles/RiskManagerDashboard';
