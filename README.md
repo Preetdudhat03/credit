@@ -40,14 +40,20 @@ Once the server is running, open your browser and navigate to:
 ---
 
 ## 🔑 Demo Credentials
-The application uses Role-Based Access Control (RBAC). You can log in using different roles to explore specific dashboards:
+Use the following credentials to access the platform. You can change your role in the settings or test the default dashboard views:
+
+- **Default Email**: `preet@credit.com`
+- **Default Password**: `preet123`
+
+### Role-Based Access (Demo)
+The application dynamically switches views based on the user's role. For exploration, use the default account above or these demo role mappings:
 
 | Role | Username (Example) | Role Key |
 | :--- | :--- | :--- |
 | **Loan Officer** | `james@bank.com` | `loan_officer` |
 | **Risk Manager** | `sarah@bank.com` | `risk_manager` |
 | **System Admin** | `admin@bank.com` | `admin` |
-| **Client** | `user@client.com` | `client` |
+| **Client** | `preet@credit.com` | `client` |
 
 > **Note**: Current authentication is handled via a local Zustand store for demo purposes.
 
