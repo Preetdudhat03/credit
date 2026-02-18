@@ -72,8 +72,3 @@ npm run start
 
 ---
 
-## 🛡️ Key Features to Explore
-- **Dynamic Dashboards**: Try logging in with different roles to see tailored UIs.
-- **AI Explanation**: View the SHAP panel in the Loan Officer view for AI transparency.
-- **Risk Analytics**: Check the Risk Manager view for interactive charts.
-- **System Control**: Explore the Admin panel for infrastructure health metrics.
