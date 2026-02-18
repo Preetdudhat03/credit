@@ -31,8 +31,8 @@ const formSchema = z.object({
 });
 
 
-// ✅ Explicit output type
-type FormOutput = z.output<typeof formSchema>;
+// ✅ Let Zod infer type automatically
+type FormValues = z.infer<typeof formSchema>;
 
 
 // ✅ Props
@@ -50,8 +50,8 @@ export function ApplicantForm({
     isLoading,
 }: ApplicantFormProps) {
 
-    const form = useForm<FormOutput>({
-        resolver: zodResolver<typeof formSchema, any, FormOutput>(formSchema),
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema), // ✅ NO GENERICS HERE
 
         defaultValues: {
             monthly_income: defaultValues?.monthly_income ?? 0,
@@ -64,7 +64,7 @@ export function ApplicantForm({
     });
 
 
-    function handleSubmit(values: FormOutput) {
+    function handleSubmit(values: FormValues) {
         onSubmit(values);
     }
 
