@@ -20,22 +20,20 @@ import { Loader2 } from "lucide-react";
 import { ApplicationData } from "@/lib/api";
 
 
-// ✅ Schema
+// ✅ FIX: use z.number() instead of z.coerce.number()
 const formSchema = z.object({
-    monthly_income: z.coerce.number().min(0, "Income must be positive"),
-    monthly_expenses: z.coerce.number().min(0, "Expenses must be positive"),
-    bank_balance: z.coerce.number().min(0, "Balance must be positive"),
-    emi_amount: z.coerce.number().min(0, "EMI must be positive"),
-    late_payments_count: z.coerce.number().min(0, "Must be non-negative"),
-    transaction_frequency: z.coerce.number().min(0, "Must be non-negative"),
+    monthly_income: z.number().min(0, "Income must be positive"),
+    monthly_expenses: z.number().min(0, "Expenses must be positive"),
+    bank_balance: z.number().min(0, "Balance must be positive"),
+    emi_amount: z.number().min(0, "EMI must be positive"),
+    late_payments_count: z.number().min(0, "Must be non-negative"),
+    transaction_frequency: z.number().min(0, "Must be non-negative"),
 });
 
 
-// ✅ Let Zod infer type automatically
 type FormValues = z.infer<typeof formSchema>;
 
 
-// ✅ Props
 interface ApplicantFormProps {
     defaultValues: ApplicationData;
     onSubmit: (data: ApplicationData) => void;
@@ -43,7 +41,6 @@ interface ApplicantFormProps {
 }
 
 
-// ✅ Component
 export function ApplicantForm({
     defaultValues,
     onSubmit,
@@ -51,7 +48,7 @@ export function ApplicantForm({
 }: ApplicantFormProps) {
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema), // ✅ NO GENERICS HERE
+        resolver: zodResolver(formSchema),
 
         defaultValues: {
             monthly_income: defaultValues?.monthly_income ?? 0,
@@ -83,7 +80,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>Monthly Income</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -97,7 +100,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>Monthly Expenses</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -111,7 +120,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>Bank Balance</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -125,7 +140,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>EMI Amount</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -139,7 +160,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>Late Payments Count</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -153,7 +180,13 @@ export function ApplicantForm({
                         <FormItem>
                             <FormLabel>Transaction Frequency</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.valueAsNumber)
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
