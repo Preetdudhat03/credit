@@ -20,7 +20,7 @@ import { Loader2 } from "lucide-react";
 import { ApplicationData } from "@/lib/api";
 
 
-// ✅ Zod schema
+// ✅ Schema
 const formSchema = z.object({
     monthly_income: z.coerce.number().min(0, "Income must be positive"),
     monthly_expenses: z.coerce.number().min(0, "Expenses must be positive"),
@@ -31,7 +31,11 @@ const formSchema = z.object({
 });
 
 
-// ✅ Props interface
+// ✅ Explicit output type
+type FormOutput = z.output<typeof formSchema>;
+
+
+// ✅ Props
 interface ApplicantFormProps {
     defaultValues: ApplicationData;
     onSubmit: (data: ApplicationData) => void;
@@ -46,9 +50,9 @@ export function ApplicantForm({
     isLoading,
 }: ApplicantFormProps) {
 
-    // ✅ FIX: Use ApplicationData type instead of z.infer
-    const form = useForm<ApplicationData>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<FormOutput>({
+        resolver: zodResolver<typeof formSchema, any, FormOutput>(formSchema),
+
         defaultValues: {
             monthly_income: defaultValues?.monthly_income ?? 0,
             monthly_expenses: defaultValues?.monthly_expenses ?? 0,
@@ -59,9 +63,11 @@ export function ApplicantForm({
         },
     });
 
-    function handleSubmit(values: ApplicationData) {
+
+    function handleSubmit(values: FormOutput) {
         onSubmit(values);
     }
+
 
     return (
         <Form {...form}>
@@ -154,11 +160,7 @@ export function ApplicantForm({
                     )}
                 />
 
-                <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full"
-                >
+                <Button type="submit" disabled={isLoading} className="w-full">
                     {isLoading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
