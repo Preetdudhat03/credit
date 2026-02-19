@@ -1,4 +1,4 @@
-1# 🚀 Getting Started with TrustScoreAI
+71# 🚀 Getting Started with TrustScoreAI
 
 Follow these steps to set up and run TrustScoreAI on your local machine. This project is built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**.
 
@@ -76,4 +76,4 @@ npm run start
 - **Dynamic Dashboards**: Try logging in with different roles to see tailored UIs.
 - **AI Explanation**: View the SHAP panel in the Loan Officer view for AI transparency.
 - **Risk Analytics**: Check the Risk Manager view for interactive charts.
-
+- **System Control**: Explore the Admin panel for infrastructure health metrics.
